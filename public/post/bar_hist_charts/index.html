@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html class="nojs" lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes">
+<title>Histograms and Barcharts – My New Hugo Site</title>
+<meta name="description" content="library(dplyr)## ## Attaching package: &amp;#39;dplyr&amp;#39;## The following objects are masked from &amp;#39;package:stats&amp;#39;:## ## filter, lag## The following objects are masked from &amp;#39;package:base&amp;#39;:## ## intersect, setdiff, setequal, unionlibrary(ggplot2)library(ggiraph)library(Lahman)HistogramVisualization df&amp;lt;-Master%&amp;gt;%select(weight)now to make a plot ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.## Warning: Removed 854 rows containing non-finite values (stat_bin).Now to get rid of the NAs that are screwing with the results">
+<meta name="created" content="2017-10-09T00:00:00&#43;0000">
+<meta name="modified" content="2017-10-09T00:00:00&#43;0000">
+<meta name="author" content="William Taylor Bickelmann">
+<meta name="generator" content="Hugo 0.31.1" />
+
+<link rel="canonical" href="/post/bar_hist_charts/">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preload" as="style" href="/css/styles.css">
+<link rel="stylesheet" href="/css/styles.css">
+<link rel="stylesheet" href="/css/print.css" media="print">
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Histograms and Barcharts",
+    "datePublished": "2017-10-09T00:00:00Z",
+    "dateModified": "2017-10-09T00:00:00Z",
+    "url" : "/post/bar_hist_charts/",
+    "description": "library(dplyr)\r## ## Attaching package: \u0026#39;dplyr\u0026#39;\r## The following objects are masked from \u0026#39;package:stats\u0026#39;:\r## ## filter, lag\r## The following objects are masked from \u0026#39;package:base\u0026#39;:\r## ## intersect, setdiff, setequal, union\rlibrary(ggplot2)\rlibrary(ggiraph)\rlibrary(Lahman)\rHistogram\rVisualization df\u0026lt;-Master%\u0026gt;%\rselect(weight)\rnow to make a plot ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.\r## Warning: Removed 854 rows containing non-finite values (stat_bin).\rNow to get rid of the NAs that are screwing with the results",
+    "author": {
+      "@type": "Person",
+      "name": "William Taylor Bickelmann"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "My New Hugo Site",
+      "url": "/",
+    }
+  }
+</script>
+
+</head>
+
+<body>
+<div class="page layout__page layout__sidebar-second">
+<header class="header layout__header" role="banner">
+<a href="/" title="Home" rel="home" class="header__logo"><img src="/images/logo.png" alt="Home" class="header__logo-image"></a>
+<h1 class="header__site-name">
+<a href="/" title="Home" class="header__site-link" rel="home"><span>My New Hugo Site</span></a>
+</h1>
+<div class="region header__region"></div>
+</header>
+
+
+
+
+<nav class="main-menu layout__navigation" role="navigation">
+<h2 class="visually-hidden">Main menu</h2>
+<ul class="navbar">
+<li><a class="" href="/">Home</a></li>
+<li><a class="active" href="/post/">Posts</a></li>
+</ul>
+</nav>
+
+
+<main class="main layout__main" role="main">
+<h1 class="title ">Histograms and Barcharts</h1>
+<article class="section-post single-view">
+<header>
+</header>
+<div class="content">
+<pre class="r"><code>library(dplyr)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code>library(ggplot2)
+library(ggiraph)
+library(Lahman)</code></pre>
+<div id="histogram" class="section level2">
+<h2>Histogram</h2>
+<p>Visualization</p>
+<pre class="r"><code>df&lt;-Master%&gt;%
+  select(weight)</code></pre>
+<p>now to make a plot</p>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<pre><code>## Warning: Removed 854 rows containing non-finite values (stat_bin).</code></pre>
+<p><img src="/post/Bar_hist_charts_files/figure-html/pressure-1.png" width="672" /></p>
+<p>Now to get rid of the NAs that are screwing with the results</p>
+<pre class="r"><code>df&lt;-df%&gt;%
+  filter(!is.na(weight))</code></pre>
+<p>now lets try again with some better graphics</p>
+<pre class="r"><code>ggplot()+
+  geom_histogram(data=df,aes(x=weight),col=&quot;black&quot;,fill=&quot;green&quot;) # two argumets were aded; color and fill</code></pre>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="/post/Bar_hist_charts_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<pre class="r"><code>ggplot()+
+  geom_histogram(data=df,aes(x=weight),col=&quot;black&quot;,fill=&quot;green&quot;, bins = 25) #now to mess with the bins</code></pre>
+<p><img src="/post/Bar_hist_charts_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>See how the appearance completely changed? You can get more granularity with more bins</p>
+<pre class="r"><code>ggplot()+
+  geom_histogram(data=df,aes(x=weight),col=&quot;black&quot;,fill=&quot;green&quot;, bins = 50)</code></pre>
+<p><img src="/post/Bar_hist_charts_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>Well thats pretty much it for histograms as they are pretty simple.</p>
+</div>
+<div id="barplots" class="section level2">
+<h2>Barplots</h2>
+<p>The prerequisite for barplots are that the Variable of interest is categorical</p>
+<pre class="r"><code>df&lt;-Teams%&gt;%
+  filter(yearID==1980)%&gt;%
+  select(name,HR)%&gt;%
+  arrange(HR)
+
+df$name&lt;-factor(df$name,levels=df$name)</code></pre>
+<p>Now that we have a categorical variable, lts get on to making a visualization</p>
+<pre class="r"><code>ggplot()+
+  geom_bar(data=df, aes(x=name,y= HR), stat=&quot;identity&quot;,color=&quot;white&quot;,fill=&quot;black&quot;)</code></pre>
+<p><img src="/post/Bar_hist_charts_files/figure-html/unnamed-chunk-7-1.png" width="672" /> lets try fliping to see if we can make the plot more readable</p>
+<pre class="r"><code>ggplot()+
+  geom_bar(data=df, aes(x=name,y= HR), stat=&quot;identity&quot;,color=&quot;white&quot;,fill=&quot;black&quot;) +
+  coord_flip()</code></pre>
+<p><img src="/post/Bar_hist_charts_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+</div>
+
+
+</div>
+</article>
+</main>
+
+
+
+<aside class="sidebar layout__second-sidebar" role="complementary">
+<section>
+<h4 class="menu"><a class="" href="/post/">Posts</a></h4>
+<ul class="menu">
+<li><a class="active" href="/post/bar_hist_charts/">Histograms and Barcharts</a></li>
+<li><a class="" href="/post/inf/">Statistical inference with the GSS data</a></li>
+<li><a class="" href="/post/2015-07-23-r-rmarkdown/">Graphing with Ggiraph</a></li>
+</ul>
+</section>
+</aside>
+
+
+<footer class="footer layout__footer" role="contentinfo">
+<p><span>© My New Hugo Site</span></p>
+
+
+</footer>
+
+</div>
+
+
+</body>
+</html>

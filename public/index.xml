@@ -10,6 +10,70 @@
     <atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Histograms and Barcharts</title>
+      <link>/post/bar_hist_charts/</link>
+      <pubDate>Mon, 09 Oct 2017 00:00:00 +0000</pubDate>
+      <guid>/post/bar_hist_charts/</guid>
+      <description>&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(dplyr)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 
+## Attaching package: &amp;#39;dplyr&amp;#39;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## The following objects are masked from &amp;#39;package:stats&amp;#39;:
+## 
+##     filter, lag&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## The following objects are masked from &amp;#39;package:base&amp;#39;:
+## 
+##     intersect, setdiff, setequal, union&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(ggplot2)
+library(ggiraph)
+library(Lahman)&lt;/code&gt;&lt;/pre&gt;
+&lt;div id=&#34;histogram&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Histogram&lt;/h2&gt;
+&lt;p&gt;Visualization&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;df&amp;lt;-Master%&amp;gt;%
+  select(weight)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;now to make a plot&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Warning: Removed 854 rows containing non-finite values (stat_bin).&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/Bar_hist_charts_files/figure-html/pressure-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Now to get rid of the NAs that are screwing with the results&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;df&amp;lt;-df%&amp;gt;%
+  filter(!is.na(weight))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;now lets try again with some better graphics&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ggplot()+
+  geom_histogram(data=df,aes(x=weight),col=&amp;quot;black&amp;quot;,fill=&amp;quot;green&amp;quot;) # two argumets were aded; color and fill&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/Bar_hist_charts_files/figure-html/unnamed-chunk-3-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ggplot()+
+  geom_histogram(data=df,aes(x=weight),col=&amp;quot;black&amp;quot;,fill=&amp;quot;green&amp;quot;, bins = 25) #now to mess with the bins&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/Bar_hist_charts_files/figure-html/unnamed-chunk-4-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;See how the appearance completely changed? You can get more granularity with more bins&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ggplot()+
+  geom_histogram(data=df,aes(x=weight),col=&amp;quot;black&amp;quot;,fill=&amp;quot;green&amp;quot;, bins = 50)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/Bar_hist_charts_files/figure-html/unnamed-chunk-5-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Well thats pretty much it for histograms as they are pretty simple.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;barplots&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Barplots&lt;/h2&gt;
+&lt;p&gt;The prerequisite for barplots are that the Variable of interest is categorical&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;df&amp;lt;-Teams%&amp;gt;%
+  filter(yearID==1980)%&amp;gt;%
+  select(name,HR)%&amp;gt;%
+  arrange(HR)
+
+df$name&amp;lt;-factor(df$name,levels=df$name)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now that we have a categorical variable, lts get on to making a visualization&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ggplot()+
+  geom_bar(data=df, aes(x=name,y= HR), stat=&amp;quot;identity&amp;quot;,color=&amp;quot;white&amp;quot;,fill=&amp;quot;black&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/Bar_hist_charts_files/figure-html/unnamed-chunk-7-1.png&#34; width=&#34;672&#34; /&gt; lets try fliping to see if we can make the plot more readable&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ggplot()+
+  geom_bar(data=df, aes(x=name,y= HR), stat=&amp;quot;identity&amp;quot;,color=&amp;quot;white&amp;quot;,fill=&amp;quot;black&amp;quot;) +
+  coord_flip()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/Bar_hist_charts_files/figure-html/unnamed-chunk-8-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Statistical inference with the GSS data</title>
       <link>/post/inf/</link>
       <pubDate>Mon, 09 Oct 2017 00:00:00 +0000</pubDate>

@@ -41,6 +41,18 @@
 <h1 class="title">Posts</h1>
 <article class="section-post list-view">
 <header>
+<h2 class="title "><a href="/post/bar_hist_charts/">Histograms and Barcharts</a></h2>
+
+</header>
+<div class="content">
+library(dplyr)## ## Attaching package: &#39;dplyr&#39;## The following objects are masked from &#39;package:stats&#39;:## ## filter, lag## The following objects are masked from &#39;package:base&#39;:## ## intersect, setdiff, setequal, unionlibrary(ggplot2)library(ggiraph)library(Lahman)HistogramVisualization
+df&lt;-Master%&gt;%select(weight)now to make a plot
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.## Warning: Removed 854 rows containing non-finite values (stat_bin).Now to get rid of the NAs that are screwing with the results
+</div>
+</article>
+
+<article class="section-post list-view">
+<header>
 <h2 class="title "><a href="/post/inf/">Statistical inference with the GSS data</a></h2>
 
 </header>
@@ -68,6 +80,7 @@ library(Lahman)library(dplyr)## ## Attaching package: &#39;dplyr&#39;## The f
 <section>
 <h4 class="menu"><a class="active" href="/post/">Posts</a></h4>
 <ul class="menu">
+<li><a class="" href="/post/bar_hist_charts/">Histograms and Barcharts</a></li>
 <li><a class="" href="/post/inf/">Statistical inference with the GSS data</a></li>
 <li><a class="" href="/post/2015-07-23-r-rmarkdown/">Graphing with Ggiraph</a></li>
 </ul>

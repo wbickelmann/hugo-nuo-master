@@ -1,0 +1,89 @@
+---
+title: "Histograms and Barcharts"
+author: "William Taylor Bickelmann"
+date: 2017-10-09
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(ggiraph)
+library(Lahman)
+```
+
+## Histogram
+Visualization
+
+```{r cars}
+df<-Master%>%
+  select(weight)
+  
+```
+
+now to make a plot
+
+```{r pressure, echo=FALSE}
+ggplot() + #blank slate 
+  geom_histogram(data = df, aes(x=weight))
+  
+```
+
+Now to get rid of the NAs that are screwing with the results
+
+```{r}
+df<-df%>%
+  filter(!is.na(weight))
+```
+now lets try again with some better graphics
+
+```{r}
+ggplot()+
+  geom_histogram(data=df,aes(x=weight),col="black",fill="green") # two argumets were aded; color and fill
+```
+
+```{r}
+ggplot()+
+  geom_histogram(data=df,aes(x=weight),col="black",fill="green", bins = 25) #now to mess with the bins
+```
+
+See how the appearance completely changed? You can get more granularity with more bins
+```{r}
+ggplot()+
+  geom_histogram(data=df,aes(x=weight),col="black",fill="green", bins = 50)
+```
+
+Well thats pretty much it for histograms as they are pretty simple. 
+
+##Barplots
+The prerequisite for barplots are that the Variable of interest is categorical
+```{r}
+df<-Teams%>%
+  filter(yearID==1980)%>%
+  select(name,HR)%>%
+  arrange(HR)
+
+df$name<-factor(df$name,levels=df$name)
+
+```
+
+Now that we have a categorical variable, lts get on to making a visualization
+
+
+```{r}
+ggplot()+
+  geom_bar(data=df, aes(x=name,y= HR), stat="identity",color="white",fill="black")
+```
+lets try fliping to see if we can make the plot more readable
+```{r}
+ggplot()+
+  geom_bar(data=df, aes(x=name,y= HR), stat="identity",color="white",fill="black") +
+  coord_flip()
+```
+
+
