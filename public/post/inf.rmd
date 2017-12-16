@@ -1,0 +1,145 @@
+---
+title: "Statistical inference with the GSS data"
+author: "William Taylor Bickelmann"
+date: 2017-10-09
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+### Load packages
+
+```{r load-packages, message = FALSE}
+library(ggplot2)
+library(dplyr)
+library(statsr)
+library(miceadds)
+```
+
+### Load data
+
+```{r load-data}
+load.Rdata(filename = "C:/Users/William/Documents/Datasets/gss.Rdata","gss")
+```
+
+* * *
+
+## Part 1: Data
+
+Our data come from the General Social Survey (GSS). The GSS gathered data on demographic, behavioral, and attitudinal trends in the United States regularly since 1972. Every year (or sometimes every two years) the GSS conducts approximately 1500 interviews. GSS used a block quota methodology for 1972-1976. GSS has since then selected interview subjects based on a full probability sample design. Results are generalizable to the non-institutionalized adult US population. One caveat: The GSS only interviews people who live in households. Approximately 10% of young adults and 10% of elderly adults do not live in households, but instead live in dorms, military barracks, assisted living, or similar facilities.
+
+The GSS is an observational study and so we cannot infer causality from these data.
+
+* * *
+
+##Part 2: Research question
+
+###Question 1
+
+Is there a differece in the way each racial group feels about the role of the government in assisting the poor. The answer to this question may be important to politicians seeking to understand his constituents, or to society at large, for the sake of understanding the demographic and political breakdown of the United States. 
+
+Null Hyopthesis: There is no association between racial group and opinion on how much the government should do since 2000
+Alternative Hypothesis: There is an association between racial group and opinion on how much the government should do  since 2000
+
+###Question 2
+
+Is there a realtionship between level of education and marriage status since the year 2000? The asnwer to this qustion could be of interest to marketing departments in educational institutions. It also affect the way of looking at education as a source of a stable marriage.
+
+Null Hypothesis: There is no association between education and marriage status since the year 2000
+Alternative Hypothesis: There is an association between education and marriage status since the year 2000
+
+###Question 3
+
+Is there a realtionship between sei score and whether one thinks the government should help the poor since . This may interest politicians and how they choose to appeal to certain income brackets.
+Null Hyopthesis: There is no association between sei score and opinion on how much the government should do since 2000
+Alternative Hypothesis: There is an association between sei score and opinion on how much the government should do  since 2000
+
+* * *
+
+First to isolate only the data necesarry for the research question. Since the question only pertains to opinions since 2000, and the research question involves race and opinion about the role of government, the only columns necesarry for the inference will be year, race and helpnot (a variable denoting the participant's opinion on whether "SHOULD GOVT DO MORE OR LESS?")
+
+## Part 3: Exploratory data analysis
+
+```{r}
+gss.race<-gss%>%
+  select(helpnot,race,year)%>%
+  filter(!is.na(helpnot), year>1999)
+
+ggplot(gss.race, aes(x=helpnot, y=race, fill=race)) + geom_bar(stat="identity") + xlab("More or Less Government") + ggtitle("Opinion on Government Role by Race", subtitle = NULL)+ coord_flip()
+```
+The chart seems to suggest a relationship betweeb opinion on government assistance and race. A larger portion of whites seem to favor less government than blacks, and the opposite is true for those who want the government to do more. However it seems that the largest group for every race opted to agree with both parts of the question, indicating that most want the government to do less and more.
+
+To explote the realtionship between maritial status and education level the first step is to explore the variables in question. These are "degree", and "marital" in addition to the "year" column. 
+
+```{r}
+
+gss.degree<-gss%>%
+  select(degree,marital,year)%>%
+  filter(!is.na(degree), !is.na(marital), year>1999)
+
+ggplot(gss.degree, aes(x=degree, y=marital, fill=marital)) + geom_bar(stat="identity") + xlab("Degree Type") +ylab("Number of Degree Holders") + ggtitle("Education Level by Marriage Status", subtitle = NULL) + coord_flip()
+```
+
+
+The plots seem to suggest some association between education levels. Although it is not clear what that association is.
+
+Next the association between sei score and opinion on whether the government should helpthe poor must be explored. The variables in question are "sei" and "helppoor" in addition to the "year"" variable.
+```{r}
+gss.helppoor<-gss %>% #create new dataframe with variables of interest
+select(helppoor,sei,year) %>%
+filter(!is.na(helppoor),!is.na(sei), year>1999) %>% #filter out NAs for each variable and specify years of interest
+group_by(helppoor) 
+
+
+ggplot(gss.helppoor, aes(x=helppoor, y=sei, fill = helppoor), color = "black") + geom_boxplot()
+
+```
+The boxplots above suggest a relationship between sei score and whether people believe in government intervention as a solution to helping the impoverished. 
+* * *
+When discerning whether there is a relationship between categorical variables, the Chi-Squared Tests of Independence is the standard method. The first step of this is to organize the data into a two way table.
+
+## Part 4: Inference
+
+
+```{r}
+two.table.degree<-table(gss.degree$degree,gss.degree$marital)
+print(two.table.degree)
+
+
+two.table.race<-table(gss.race$helpnot,gss.race$race)
+print(two.table.race)
+
+helppoor.model<-aov(sei ~ helppoor, data=gss.helppoor)
+```
+
+Next step is to perform the Chi-Squared test on the data. In r this task is easily performed by the chisq.test function. Once a p value is derived from this method, the null hyopthesis can either be accepted or rejected. Additionally an anova test must be used as a hypothesis test to determine a realtionship between sei score and opinion on role of government.
+```{r}
+two.table.race.chi<-chisq.test(two.table.race)
+print(two.table.race.chi)
+
+two.table.degree.chi<-chisq.test(two.table.degree)
+print(two.table.degree.chi)
+
+print(helppoor.model)
+```
+
+I will set the significance level for rejecting th null hypothesis at .01. I will set up an if statement to give reject give direction on whether the null hypothesis should be rejected or accepted.
+```{r}
+significance.test<-function(x)
+if(x$p.value>.01){
+  print("Fail to reject null hypothesis")
+}else if(x$p.value<.01){
+  print("Reject null hypothesis in favor of Alternative Hypothesis")
+}
+
+significance.test(two.table.race.chi)
+significance.test(two.table.degree.chi)
+summary(helppoor.model)
+
+```
+
+##Conclusion
+According to the p value from the chi-square test, the null hypothesis must be rejected. There is a relationship between racial group and opinion on how much the government should do. There is a realtionship between sei score and how much government should do, according to the output of the anova test. Additionally there is a reltionship between level of education and marriage status.

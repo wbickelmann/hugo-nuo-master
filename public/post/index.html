@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html class="nojs" lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes">
+<title>Posts – My New Hugo Site</title>
+<link rel="alternate" type="application/rss" title="RSS" href="/post/index.xml">
+<meta name="generator" content="Hugo 0.31.1" />
+
+<link rel="canonical" href="/post/">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preload" as="style" href="/css/styles.css">
+<link rel="stylesheet" href="/css/styles.css">
+<link rel="stylesheet" href="/css/print.css" media="print">
+
+</head>
+
+<body>
+<div class="page layout__page layout__sidebar-second">
+<header class="header layout__header" role="banner">
+<a href="/" title="Home" rel="home" class="header__logo"><img src="/images/logo.png" alt="Home" class="header__logo-image"></a>
+<h1 class="header__site-name">
+<a href="/" title="Home" class="header__site-link" rel="home"><span>My New Hugo Site</span></a>
+</h1>
+<div class="region header__region"></div>
+</header>
+
+
+
+
+<nav class="main-menu layout__navigation" role="navigation">
+<h2 class="visually-hidden">Main menu</h2>
+<ul class="navbar">
+<li><a class="" href="/">Home</a></li>
+<li><a class="active" href="/post/">Posts</a></li>
+</ul>
+</nav>
+
+
+<main class="main layout__main" role="main">
+<h1 class="title">Posts</h1>
+<article class="section-post list-view">
+<header>
+<h2 class="title "><a href="/post/inf/">Statistical inference with the GSS data</a></h2>
+
+</header>
+<div class="content">
+Load packageslibrary(ggplot2)library(dplyr)library(statsr)library(miceadds)Load dataload.Rdata(filename = &quot;C:/Users/William/Documents/Datasets/gss.Rdata&quot;,&quot;gss&quot;)Part 1: DataOur data come from the General Social Survey (GSS). The GSS gathered data on demographic, behavioral, and attitudinal trends in the United States regularly since 1972. Every year (or sometimes every two years) the GSS conducts approximately 1500 interviews. GSS used a block quota methodology for 1972-1976. GSS has since then selected interview subjects based on a full probability sample design.
+</div>
+</article>
+
+<article class="section-post list-view">
+<header>
+<h2 class="title "><a href="/post/2015-07-23-r-rmarkdown/">Graphing with Ggiraph</a></h2>
+
+</header>
+<div class="content">
+library(Lahman)library(dplyr)## ## Attaching package: &#39;dplyr&#39;## The following objects are masked from &#39;package:stats&#39;:## ## filter, lag## The following objects are masked from &#39;package:base&#39;:## ## intersect, setdiff, setequal, unionlibrary(ggplot2)library(ggiraph)df&lt;-Teams%&gt;%filter(yearID == 1980)%&gt;%select(name, HR)%&gt;%arrange(HR)df$name&lt;-factor(df$name, levels = df$name)g&lt;-ggplot() +geom_bar_interactive(data = df, aes(x = name, y = HR, tooltip = HR, data_id = name), stat = &quot;identity&quot;, color = &quot;blue&quot;, fill = &quot;white&quot;) +coord_flip()+ggtitle(&quot;1980 Team Homeruns&quot;)+ylab(&quot;Homeruns&quot;)+xlab(&quot;Team Name&quot;)ggiraph(code = print(g), hover_css = &quot;fill:red;stroke:black&quot;){"
+</div>
+</article>
+
+
+</main>
+
+
+
+<aside class="sidebar layout__second-sidebar" role="complementary">
+<section>
+<h4 class="menu"><a class="active" href="/post/">Posts</a></h4>
+<ul class="menu">
+<li><a class="" href="/post/inf/">Statistical inference with the GSS data</a></li>
+<li><a class="" href="/post/2015-07-23-r-rmarkdown/">Graphing with Ggiraph</a></li>
+</ul>
+</section>
+</aside>
+
+
+<footer class="footer layout__footer" role="contentinfo">
+<p><span>© My New Hugo Site</span></p>
+
+
+</footer>
+
+</div>
+
+
+</body>
+</html>
