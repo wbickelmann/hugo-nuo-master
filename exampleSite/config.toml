@@ -1,4 +1,4 @@
-baseURL = "thirsty-colden-928b4d.netlify.com"
+baseURL = "https://thirsty-colden-928b4d.netlify.com"
 languageCode = "en"
 title = "Hugo Blog"
 theme = "hugo-nuo"
